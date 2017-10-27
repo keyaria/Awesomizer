@@ -1,0 +1,76 @@
+
+  
+  <% if @aString.present? %>
+      <% books = JSON.parse @aString %>
+      <% if params[:order] == "votes" %>
+      <% books.sort_by! { | h | h["votes"] }.reverse! %>
+      <% else %>
+      <% books.sort_by! { | h | h["timestamp"] }.reverse! %>
+      <% end %>
+
+ <nav class="navbar navbar-inverse " role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">The Awesomizer</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+          <% if params[:order] == "votes" %>
+            <li> <a href="/">Recently Awesomized</a></li>
+            <li class="active"><a href="/?order=votes">Most Awesomized</a></li>
+          <% else %>
+          <li class="active"><a href="/">Recently Awesomized</a></li>
+            <li><a href="/?order=votes">Most Awesomized</a></li>
+            <% end %>
+            <li><a href="/about">About</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+<div class="container">
+  <div class="row">
+  <div class="col-xs-12">
+  <% if params[:order] == "votes" %>
+  <h2>Most Awesomized</h2>
+  <% else %>
+  <h2>Recently Awesomized</h2>
+  <% end %>
+  <div id="documents">
+    <% books.each do |data| %>
+
+<% if  data["votes"] != "0" %>
+
+
+
+      
+              <div class="document">
+               <% if !data["oclc_id"].blank? %>
+              <a href="http://newcatalog.library.cornell.edu/catalog/<%= data['bibid']%>" ><div class="iconcover bookcover" id="OCLC:<%= data["oclc_id"] %>" data-oclc="<%= data["oclc_id"] %>">
+</div></a>
+
+     <% end %>
+              <h5><a href="http://newcatalog.library.cornell.edu/catalog/<%= data['bibid']%>" ><%= data["title"].gsub!('/',' ') %></a>
+
+             </h5>
+
+
+             <p> <% if !data["author"].blank? %><%= data["author"] %><br><%end%>Awesome Votes: <%= data["votes"] %></p>
+             
+            </div><!--/.col-xs-6.col-lg-4-->
+            <% end %>
+            <%end%>
+            <%end%>
+            </div>
+            </div>
+          </div><!--/row-->
+          </div>
+
+ 
