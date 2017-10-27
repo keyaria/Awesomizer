@@ -1,7 +1,8 @@
 
   
   <% if @aString.present? %>
-      <% books = JSON.parse @aString %>
+      <!--there was a Json.parse here-->
+      <% books = JSON.parse(@aString.to_json).first %>
       <% if params[:order] == "votes" %>
       <% books.sort_by! { | h | h["votes"] }.reverse! %>
       <% else %>
@@ -57,11 +58,12 @@
 </div></a>
 
      <% end %>
-              <h5><a href="http://newcatalog.library.cornell.edu/catalog/<%= data['bibid']%>" ><%= data["title"].gsub!('/',' ') %></a>
-
+            
+              <h5><a href="http://newcatalog.library.cornell.edu/catalog/<%= data['bibid']%>" ><%= data["title"] %></a>
+            <!--.gsub!('/',' ')-->
              </h5>
-
-
+            
+            
              <p> <% if !data["author"].blank? %><%= data["author"] %><br><%end%>Awesome Votes: <%= data["votes"] %></p>
              
             </div><!--/.col-xs-6.col-lg-4-->
