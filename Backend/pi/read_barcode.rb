@@ -58,20 +58,19 @@ code = []
 scanner.each do |event|
   # Ignore everything except key press events
   next unless event.type == 1 && event.value == 1
-  puts "Key: #{event.code_str}"
+  #puts "Key: #{event.code_str}"
   
   if event.code_str == 'Enter'
-    
-    puts "WORKS"
-    barcode = code.join
+    open("http://localhost:4567/inc/#{code.join}")
     code = []
 
-    list_of_books = CSV.read("barcodes.csv")
-    CSV.foreach("barcodes.csv") do |row|
-        if row[1] == barcode
-	    puts "Found " + row[0]
-	end
-    end
+    #list_of_books = CSV.read("SDL_Books.csv")
+    #CSV.foreach("SDL_Books.csv") do |row|
+    #    if row[0] == barcode
+    #	    puts "Found " + row[1]
+    #	end
+    #end
+
     # Pause the 'waiting for input' LED sequence, run the 'success' sequence,
     # then go back to waiting.
     #led_thread.kill

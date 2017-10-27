@@ -6,7 +6,7 @@ $config = YAML.load_file('config.yml')
 
 require 'sinatra'
 require 'json'
-require 'mysql2'
+require 'csv'
 # require 'oci8'
 
 # 'list' returns a list of all items in the database
@@ -18,7 +18,13 @@ end
 # the barcode lookup succeeds)
 get '/inc/:barcode' do |barcode|
   puts "barcode: #{barcode}"
-
+	
+  CSV.foreach("../pi/SDL_Books.csv") do |row|
+      
+      if row[0] == barcode
+        puts "Found " + row[1]
+      end
+  end
   # metadata = _voyager_lookup barcode
   # if !metadata[:bibid].nil?
   #  _increment_count metadata
@@ -28,6 +34,7 @@ end
 # 'inc' increments the votes for a particular item (assuming that
 # the barcode lookup succeeds)
 get '/inc' do
+ 
   barcode = params['barcode']
   location = params['loc']
   metadata = _voyager_lookup barcode
@@ -38,15 +45,16 @@ end
 
 # Retrieve a list of all the items in the database
 def _get_items
-  con = Mysql2::Client.new(:host     => $config['awesomizer']['host'], 
-                           :username => $config['awesomizer']['user'], 
-                           :password => $config['awesomizer']['pass'], 
-                           :database => $config['awesomizer']['database'])
+  #con = Mysql2::Client.new(:host     => $config['awesomizer']['host'], 
+  #                         :username => $config['awesomizer']['user'], 
+  #                         :password => $config['awesomizer']['pass'], 
+  #                         :database => $config['awesomizer']['database'])
   output = []
-  con.query('select * from items order by timestamp desc limit 80').each do |row|
-    output.push row
-  end
-
+  #con.query('select * from items order by timestamp desc limit 80').each do |row|
+  #  output.push row
+  #end
+  #con.query("insert into items (bibid, title, author, oclc_id, votes) values ('#{metadata[:bibid]}', '#{metadata[:title]}', '#{metadata[:author]}', '#{metadata[:oclc_id]}', 1) on duplicate key update votes=votes+1")
+  puts "get_items"
   output
 
 end
@@ -54,10 +62,10 @@ end
 # Main Awesomizer database write function
 def _increment_count metadata, location = nil
 
-  con = Mysql2::Client.new(:host     => $config['awesomizer']['host'], 
-                           :username => $config['awesomizer']['user'], 
-                           :password => $config['awesomizer']['pass'], 
-                           :database => $config['awesomizer']['database'])  
+  #con = Mysql2::Client.new(:host     => $config['awesomizer']['host'], 
+  #                         :username => $config['awesomizer']['user'], 
+  #                         :password => $config['awesomizer']['pass'], 
+  #                         :database => $config['awesomizer']['database'])  
   # TODO: the 'duplicate key' clause of this query
   # is nice, but it means that the code does a
   # Voyager lookup each and every time a code is
@@ -65,7 +73,8 @@ def _increment_count metadata, location = nil
   # it would be more efficient to check for the bibid
   # first and only do the voyager lookup if we don't
   # have the metadata yet.
-  con.query("insert into items (bibid, title, author, oclc_id, votes) values ('#{metadata[:bibid]}', '#{metadata[:title]}', '#{metadata[:author]}', '#{metadata[:oclc_id]}', 1) on duplicate key update votes=votes+1")
+  #con.query("insert into items (bibid, title, author, oclc_id, votes) values ('#{metadata[:bibid]}', '#{metadata[:title]}', '#{metadata[:author]}', '#{metadata[:oclc_id]}', 1) on duplicate key update votes=votes+1")
+  puts "increment count"
 end
 
 # Looks up a barcode in the Voyager database and retrieves useful metadata
@@ -90,7 +99,7 @@ def _voyager_lookup code
   #    metadata[:oclc_id] = result.captures[0]
   #  end
   #end
-
+  puts "lookup"
   return metadata
 
 end
