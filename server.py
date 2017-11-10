@@ -1,4 +1,4 @@
-import time, threading, models,json, csv, isbnlib
+import time, threading, models, json, csv, isbnlib
 from threading import Thread
 from flask import Flask, render_template, session, request
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
@@ -39,13 +39,13 @@ def get_barcode_from_scanner(barcode):
 
     if times_scanned == None:
         models.insert_books(str(book_info['Authors']), str(ISBN), str(book_cover['thumbnail']), 1)
-	res = [str(book_info['Authors']), str(ISBN), str(book_cover['thumbnail']), 1]
+        res = [str(book_info['Authors']), str(ISBN), str(book_cover['thumbnail']), 1]
         socketio.emit('barcode', {'data': res}, namespace="/awesome")
     else:
         models.update_times_scanned(times_scanned + 1, ISBN)
         res = models.get_info_from_ISBN(ISBN)
         socketio.emit('update_data', {'data': res}, namespace="/awesome")
-    
+
     return render_template('index.html', data = [])
 
 #Gets called whenever someone connects to web site, probably don't need
@@ -56,4 +56,3 @@ def local_client_connect():
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, port=5000, host='0.0.0.0')
-

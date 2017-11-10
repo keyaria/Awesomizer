@@ -13,8 +13,8 @@ def get_all_books():
         cur = con.cursor()
         result = cur.execute("select * from books").fetchall()
         result = [list(map(str, eachTuple)) for eachTuple in result]
-        print result
-        return result
+        print (result)
+        return (result)
 
 #Updates the number of times a book as been scanned
 def update_times_scanned(times_scanned, ISBN):
