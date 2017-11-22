@@ -22,6 +22,14 @@ def index():
     res = models.get_all_books()
     return render_template('index.html', data = (res))
 
+@app.route('/most-awesomized')
+def most_awesome():
+    res = models.get_all_books()
+    return render_template('most-awesomized.html', data = (res))
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 #This recieves the request from scanner.py. Searches to see how many times it has been
 #Scanned in in the database. If it hasn't been scanned before, make a new entry in database
