@@ -1,10 +1,10 @@
 import sqlite3 as sql
 
 #Adds entry to database
-def insert_books(title, uthor_name, ISBN, thumbnail, times_scanned):
+def insert_books(title, author_name, ISBN, thumbnail, times_scanned):
     with sql.connect("database.db") as con:
         cur = con.cursor()
-        cur.execute("INSERT INTO books (title, author_name, ISBN, thumbnail, times_scanned) VALUES (?,?,?,?)", (author_name, ISBN, thumbnail, times_scanned))
+        cur.execute("INSERT INTO books (title, author_name, ISBN, thumbnail, times_scanned) VALUES (?,?,?,?,?)", (title, author_name, ISBN, thumbnail, times_scanned))
         con.commit()
 
 #Returns all entries in database
@@ -31,7 +31,7 @@ def search_ISBN_get_times_scanned(ISBN):
         if len(res) == 0:
             return None
         else:
-            return int(res[0][3]) #returns times_scanned
+            return int(res[0][4]) #returns times_scanned
 
 #Returns all the info for one specific book
 def get_info_from_ISBN(ISBN):
