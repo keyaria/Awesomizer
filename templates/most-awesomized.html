@@ -17,6 +17,7 @@
     <script type="text/javascript" charset="utf-8">
           var data = '{{ data|tojson|safe }}'
           var data_converted = JSON.parse("[" + data + "]")[0]
+          data_converted.sort().reverse()
           console.log(data_converted)
           $(document).ready(function()
           {
@@ -25,9 +26,9 @@
                   for (var i = 0; i < data_converted.length; i++) {
                       console.log(data_converted[i])
                       console.log(data_converted[i][3])
-                      $( "#Content" ).prepend("<div style='float: left;'> <img src=\"" + data_converted[i][2] + " \" style='width: 160px'><div id=\"" + data_converted[i][1] +
-                      "-scanned\" style ='width: 150px; text-align: center; font-size: 15px;'>Times Scanned: "
-                                      + data_converted[i][3] + "</div></div>");
+                      $( "#Content" ).prepend("<div style='float: left; padding: 10px 10px 10px 10px;'> <img src=\"" + data_converted[i][2] + " \" style='height:160px; width:120px; display:block; margin-left:20px; margin-top: auto'><div id=\"" + data_converted[i][1] +
+                      "-scanned\" style ='width: 150px; text-align: center; font-size: 15px;'> Times Scanned: "
+                        + data_converted[i][3] + "</div>");
                   }
               }
               namespace = '/awesome'; // change to an empty string to use the global namespace
@@ -41,14 +42,14 @@
               socket.on('barcode', function(msg)
               {
                   console.log("First time scanned")
-                  $( "#Content" ).prepend("<div style='float: left;'> <img src=\"" + msg.data[2] + " \" style='width: 160px'><div id=\"" + msg.data[1] +
+                  $( "#Content" ).prepend("<div style='float: left'> <img src=\"" + msg.data[2] + " \" style='height:160px; width:120px; display:block; margin-left:20px; margin-top: auto'><div id=\"" + msg.data[1] +
                       "-scanned\" style ='width: 150px; text-align: center; font-size: 15px;'>Times Scanned: " + msg.data[3] + "</div></div>");
               });
               //Recieves updated information
               socket.on('update_data', function(msg)
               {
                   console.log(msg.data[0])
-                  var update= document.getElementById(msg.data[0][1].toString() + "-scanned")
+                  var update = document.getElementById(msg.data[0][1].toString() + "-scanned")
                   update.innerHTML = "Times Scanned: " + msg.data[0][3].toString()
               });
           });
@@ -89,22 +90,6 @@
     <br>
 
 		<div class="container-fluid" style="padding-left: 30px" id="Content">
-      <div class="row" style="padding-top:10px; background:#DBD0B6; width:416px; height:185px; border-radius:5px">
-        <div>
-          <img src="/static/goog.jpg" style="height:160px; width:120px; display:block; margin-left:20px; margin-top: auto">
-        </div>
-        &nbsp; &nbsp;
-        <div>
-        <p> <!-- maybe a link to the book in Mlibrary's website? -->
-          <br>
-          "40 ways to Have Fun With Google"
-          <br>
-          by: <i>Lanssen, Philipp</i>
-          <br>
-          Awesome Votes: 51
-        </p>
-      </div>
-      </div>
 		</div>
 </body>
 </html>

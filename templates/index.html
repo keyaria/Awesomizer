@@ -25,9 +25,9 @@
                   for (var i = 0; i < data_converted.length; i++) {
                       console.log(data_converted[i])
                       console.log(data_converted[i][3])
-                      $( "#Content" ).prepend("<div style='float: left; padding: 10px 10px 10px 10px; background:#DBD0B6; width:416px; height:185px; border-radius:5px'> <img src=\"" + data_converted[i][2] + " \" style='height:160px; width:120px; display:block; margin-left:20px; margin-top: auto'><div id=\"" + data_converted[i][1] +
+                      $( "#Content" ).prepend("<div style='float: left; padding: 10px 10px 10px 10px; border-radius:5px'> <img src=\"" + data_converted[i][2] + " \" style='height:160px; width:120px; display:block; margin-left:20px; margin-top: auto'><div id=\"" + data_converted[i][1] +
                       "-scanned\" style ='width: 150px; text-align: center; font-size: 15px;'> Times Scanned: "
-                        + data_converted[i][3] + "</div>");
+                                     + data_converted[i][3] + "</div></div>");
                   }
               }
               namespace = '/awesome'; // change to an empty string to use the global namespace
@@ -48,7 +48,7 @@
               socket.on('update_data', function(msg)
               {
                   console.log(msg.data[0])
-                  var update = document.getElementById(msg.data[0][1].toString() + "-scanned")
+                  var update= document.getElementById(msg.data[0][1].toString() + "-scanned")
                   update.innerHTML = "Times Scanned: " + msg.data[0][3].toString()
               });
           });
