@@ -45,8 +45,8 @@ def get_barcode_from_scanner(barcode):
     times_scanned = models.search_ISBN_get_times_scanned(ISBN)
 
     if times_scanned == None:
-        models.insert_books(str(book_info['Authors']), str(ISBN), str(book_cover['thumbnail']), 1)
-        res = [str(book_info['Authors']), str(ISBN), str(book_cover['thumbnail']), 1]
+        models.insert_books(str(book_info['Title']), str(book_info['Authors']), str(ISBN), str(book_cover['thumbnail']), 1)
+        res = [str(book_info['Title']), str(book_info['Authors']), str(ISBN), str(book_cover['thumbnail']), 1]
         socketio.emit('barcode', {'data': res}, namespace="/awesome")
     else:
         models.update_times_scanned(times_scanned + 1, ISBN)

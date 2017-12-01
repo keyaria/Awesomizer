@@ -1,40 +1,79 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Most Awesomized | The Awesomizer</title>
+    <title>Recently Awesomized | The Awesomizer</title>
 
 		<link rel= "stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:400,400italic,300,100">
-		<script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
-
+	  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 
     <link rel="shortcut icon" href="/static/favicon.png">
     <link rel="apple-touch-icon" href="/static/favicon.png">
 
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" charset="utf-8">
+          var data = '{{ data|tojson|safe }}'
+          var data_converted = JSON.parse("[" + data + "]")[0]
+          data_converted.sort().reverse()
+          console.log(data_converted)
+          $(document).ready(function()
+          {
+              if (data_converted.length != 0) {
+                  console.log("Database")
+                  for (var i = 0; i < data_converted.length; i++) {
+                      console.log(data_converted[i])
+                      console.log(data_converted[i][3])
+                      $( "#Content" ).prepend("<div style='float: left; padding: 10px 10px 10px 10px;'> <img src=\"" + data_converted[i][2] + " \" style='height:160px; width:120px; display:block; margin-left:20px; margin-top: auto'><div id=\"" + data_converted[i][1] +
+                      "-scanned\" style ='width: 150px; text-align: center; font-size: 15px;'> Times Scanned: "
+                        + data_converted[i][3] + "</div>");
+                  }
+              }
+              namespace = '/awesome'; // change to an empty string to use the global namespace
+
+              // the socket.io documentation recommends sending an explicit package upon connection
+              // this is specially important when using the global namespace
+              var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
+
+              // event handler for server sent data
+              // the data is displayed in the "Received" section of the page
+              socket.on('barcode', function(msg)
+              {
+                  console.log("First time scanned")
+                  $( "#Content" ).prepend("<div style='float: left'> <img src=\"" + msg.data[2] + " \" style='height:160px; width:120px; display:block; margin-left:20px; margin-top: auto'><div id=\"" + msg.data[1] +
+                      "-scanned\" style ='width: 150px; text-align: center; font-size: 15px;'>Times Scanned: " + msg.data[3] + "</div></div>");
+              });
+              //Recieves updated information
+              socket.on('update_data', function(msg)
+              {
+                  console.log(msg.data[0])
+                  var update = document.getElementById(msg.data[0][1].toString() + "-scanned")
+                  update.innerHTML = "Times Scanned: " + msg.data[0][3].toString()
+              });
+          });
+      </script>
 </head>
 
 <body>
   <br> &nbsp; &nbsp;
-	<a href="https://www.lib.umich.edu"><img src="/static/um_logo.png"></a>
-	<a href="https://www.lib.umich.edu"><img src="/static/mlibrary_logo.png"></a>
-	<br><br>
+  <a href="https://www.lib.umich.edu"> <img src="/static/um_logo.png"></a>
+  <a href="https://www.lib.umich.edu"><img src="/static/mlibrary_logo.png"></a>
+  <br><br>
 
   <nav class="navbar navbar-light" style="background-color:#60748F">
     <a class="navbar-brand" href="/">The Awesomizer | Shapiro DesignLab</a>
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="/">Recently Awesomized</a>
-        </li>
         <li class="nav-item active">
+          <a class="nav-link" href="/">Recently Awesomized <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="/most-awesomized">Most Awesomized</a>
         </li>
         <li class="nav-item">
@@ -45,32 +84,12 @@
   </nav>
 
 	 <br>
-
    <div class="container-fluid">
-   <h3> Most Awesomized </h3>
-   </div>
-   <br>
-
-      <div class="container-fluid" style="padding-left: 30px">
-        <div class="row" style="padding-top:10px; background:#DBD0B6; width:416px; height:185px; border-radius:5px">
-          <div>
-            <img src="/static/goog.jpg" style="height:160px; width:120px; display:block; margin-left:20px; margin-top: auto">
-          </div>
-          &nbsp; &nbsp;
-          <div>
-          <p> <!-- maybe a link to the book in Mlibrary's website? -->
-            <br>
-            "40 ways to Have Fun With Google"
-            <br>
-            by: <i>Lanssen, Philipp</i>
-            <br>
-            Awesome Votes: 51
-          </p>
-        </div>
-  		</div>
-   </div>
+	    <h3> Most Awesomized </h3>
+    </div>
     <br>
 
+		<div class="container-fluid" style="padding-left: 30px" id="Content">
 		</div>
 </body>
 </html>

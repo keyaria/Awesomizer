@@ -1,10 +1,10 @@
 import sqlite3 as sql
 
 #Adds entry to database
-def insert_books(author_name, ISBN, thumbnail, times_scanned):
+def insert_books(title, uthor_name, ISBN, thumbnail, times_scanned):
     with sql.connect("database.db") as con:
         cur = con.cursor()
-        cur.execute("INSERT INTO books (author_name, ISBN, thumbnail, times_scanned) VALUES (?,?,?,?)", (author_name, ISBN, thumbnail, times_scanned))
+        cur.execute("INSERT INTO books (title, author_name, ISBN, thumbnail, times_scanned) VALUES (?,?,?,?)", (author_name, ISBN, thumbnail, times_scanned))
         con.commit()
 
 #Returns all entries in database
