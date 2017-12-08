@@ -15,8 +15,10 @@ def get_ISBN_from_barcode_csv(barcode):
                 return str(isbnlib.get_isbnlike(str(row[2]))[0])
 
 def get_ISBN_from_barcode(barcode):
-    info = requests.get("https://mirlyn.lib.umich.edu/api/simple/v1/barcode/{}".format(barcode)
-    return info.json()['docs'][0]['isbn']
+    info = requests.get("https://mirlyn.lib.umich.edu/api/simple/v1/barcode/{}".format(barcode))
+    print(info.text)
+
+    return json.loads(info.text)['docs'][0]['isbn'][0]
 
 #This is whatis called when you go to the website (localhost:5000).
 #Sends all the information from database so the website can be populated
