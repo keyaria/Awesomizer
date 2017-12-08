@@ -1,4 +1,4 @@
-import time, threading, models, json, csv, isbnlib
+import time, threading, models, json, csv, isbnlib, requests
 from threading import Thread
 from flask import Flask, render_template, session, request
 from flask_socketio import SocketIO, emit, join_room, leave_room, close_room, rooms, disconnect
@@ -7,13 +7,16 @@ from multiprocessing import Process
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-def get_ISBN_from_barcode(barcode):
+def get_ISBN_from_barcode_csv(barcode):
     with open('ISBNs.csv', 'rb') as csvfile:
         book_list = csv.reader(csvfile, delimiter=',', quotechar='|')
         for row in book_list:
             if row[0] == barcode:
                 return str(isbnlib.get_isbnlike(str(row[2]))[0])
 
+def get_ISBN_from_barcode(barcode):
+    info = requests.get("https://mirlyn.lib.umich.edu/api/simple/v1/barcode/{}".format(barcode)
+    return info.json()['docs'][0]['isbn']
 
 #This is whatis called when you go to the website (localhost:5000).
 #Sends all the information from database so the website can be populated
