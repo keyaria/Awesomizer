@@ -17,18 +17,25 @@
     <script type="text/javascript" charset="utf-8">
           var data = '{{ data|tojson|safe }}'
           var data_converted = JSON.parse("[" + data + "]")[0]
-          data_converted.sort().reverse()
+          var re = new RegExp('u');
+          data_converted.sort(function(a,b){
+            return a[4] > b[4]
+          });
+
           console.log(data_converted)
           $(document).ready(function()
           {
               if (data_converted.length != 0) {
                   console.log("Database")
                   for (var i = 0; i < data_converted.length; i++) {
-                      console.log(data_converted[i])
-                      console.log(data_converted[i][3])
-                      $( "#Content" ).prepend("<div style='float: left; padding: 10px 10px 10px 10px;'> <img src=\"" + data_converted[i][2] + " \" style='height:160px; width:120px; display:block; margin-left:20px; margin-top: auto'><div id=\"" + data_converted[i][1] +
-                      "-scanned\" style ='width: 150px; text-align: center; font-size: 15px;'> Times Scanned: "
-                        + data_converted[i][3] + "</div>");
+                    var d = String(data_converted[i][1])
+                    var authors = re.exec(d)
+
+                      $( "#Content" ).prepend("<div style='align: left; float: left; padding: 10px 10px 10px 10px; border-radius:5px'> <img src=\"" + data_converted[i][3] + " \" style='height:160px; width:120px; display:block; margin-left:20px; margin-top: auto'><div id=\"" + data_converted[i][2] +
+                      "-scanned\" style ='width: 160px; text-align: center; font-size: 15px;''>'"
+                                  + data_converted[i][0] + "' <br> by: "
+                                  +  authors +
+                                    "<br> Times Scanned: " + data_converted[i][4] + "</div>");
                   }
               }
               namespace = '/awesome'; // change to an empty string to use the global namespace
@@ -42,15 +49,15 @@
               socket.on('barcode', function(msg)
               {
                   console.log("First time scanned")
-                  $( "#Content" ).prepend("<div style='float: left'> <img src=\"" + msg.data[2] + " \" style='height:160px; width:120px; display:block; margin-left:20px; margin-top: auto'><div id=\"" + msg.data[1] +
-                      "-scanned\" style ='width: 150px; text-align: center; font-size: 15px;'>Times Scanned: " + msg.data[3] + "</div></div>");
+                  $( "#Content" ).prepend("<div style='float: left'> <img src=\"" + msg.data[3] + " \" style='height:160px; width:120px; display:block; margin-left:20px; margin-top: auto'><div id=\"" + msg.data[2] +
+                      "-scanned\" style ='width: 150px; text-align: center; font-size: 15px;'>Times Scanned: " + msg.data[4] + "</div></div>");
               });
               //Recieves updated information
               socket.on('update_data', function(msg)
               {
                   console.log(msg.data[0])
-                  var update = document.getElementById(msg.data[0][1].toString() + "-scanned")
-                  update.innerHTML = "Times Scanned: " + msg.data[0][3].toString()
+                  var update= document.getElementById(msg.data[0][2].toString() + "-scanned")
+                  update.innerHTML = "Times Scanned: " + msg.data[0][4].toString()
               });
           });
       </script>
@@ -86,10 +93,10 @@
 	 <br>
    <div class="container-fluid">
 	    <h3> Most Awesomized </h3>
-    </div>
-    <br>
+   </div>
+   <br>
 
-		<div class="container-fluid" style="padding-left: 30px" id="Content">
-		</div>
+	 <div class="container-fluid" style="padding-left: 30px" id="Content">
+	 </div>
 </body>
 </html>

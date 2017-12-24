@@ -18,16 +18,24 @@
           var data = '{{ data|tojson|safe }}'
           var data_converted = JSON.parse("[" + data + "]")[0]
           console.log(data_converted)
+          var re = new RegExp('u');
+          data_converted.sort(function(a,b){
+            return a[4] > b[4]
+          });
           $(document).ready(function()
           {
               if (data_converted.length != 0) {
                   console.log("Database")
                   for (var i = 0; i < data_converted.length; i++) {
+                      var d = String(data_converted[i][1])
+                      var authors = re.exec(d)
                       console.log(data_converted[i])
                       console.log(data_converted[i][3])
                       $( "#Content" ).prepend("<div style='float: left; padding: 10px 10px 10px 10px; border-radius:5px'> <img src=\"" + data_converted[i][3] + " \" style='height:160px; width:120px; display:block; margin-left:20px; margin-top: auto'><div id=\"" + data_converted[i][2] +
-                      "-scanned\" style ='width: 150px; text-align: center; font-size: 15px;'> Times Scanned: "
-                                     + data_converted[i][4] + "</div></div>");
+                      "-scanned\" style ='width: 150px; text-align: center; font-size: 15px;'>"
+                                      + data_converted[i][0] + "' <br> by: "
+                                      +  authors +
+                                      +"<br><br>" + "Times Scanned: "+ data_converted[i][4] + "</div></div>");
                   }
               }
               namespace = '/awesome'; // change to an empty string to use the global namespace
