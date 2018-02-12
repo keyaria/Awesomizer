@@ -4,7 +4,7 @@ import sqlite3 as sql
 def insert_books(title, author_name, ISBN, thumbnail, times_scanned):
     with sql.connect("database.db") as con:
         cur = con.cursor()
-        cur.execute("INSERT INTO books (title, author_name, ISBN, thumbnail, times_scanned) VALUES (?,?,?,?,?)", (title, author_name, ISBN, thumbnail, times_scanned))
+        cur.execute("INSERT OR IGNORE INTO books VALUES (title, author_name, ISBN, thumbnail, times_scanned) VALUES (?,?,?,?,?)", (title, author_name, ISBN, thumbnail, times_scanned))
         con.commit()
 
 #Returns all entries in database
