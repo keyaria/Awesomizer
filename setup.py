@@ -1,7 +1,6 @@
 """
-Insta485 python package configuration.
+Awesomebox python package configuration.
 
-Andrew DeOrio <awdeorio@umich.edu>
 """
 
 from setuptools import setup

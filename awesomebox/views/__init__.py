@@ -1,2 +1,2 @@
-"""Views, one for each Insta485 page."""
+"""Views, one for each awesomebox page."""
 from awesomebox.views.index import show_index
