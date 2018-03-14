@@ -2,6 +2,8 @@
 import flask
 import awesomebox
 import isbnlib
+import requests
+import json
 from awesomebox.api.error_handler import InvalidUsage
 
 def get_ISBN_from_barcode(barcode):
@@ -10,7 +12,7 @@ def get_ISBN_from_barcode(barcode):
 
     return json.loads(info.text)['docs'][0]['isbn'][0]
 
-@awesomebox.app.route('/api/v1/awesomize/<int:barcode>/', methods=["POST"])
+@awesomebox.app.route('/api/v1/awesomize/<int:barcode>/', methods=["POST", "GET"])
 def awesomize_book(barcode):
     ISBN = get_ISBN_from_barcode(barcode)
     book_info = isbnlib.meta(ISBN)
@@ -29,6 +31,6 @@ def awesomize_book(barcode):
         }
     else:
         awesomebox.model.update_times_scanned(times_scanned + 1, ISBN)
-        res = models.get_info_from_ISBN(ISBN)
+        res = awesomebox.model.get_info_from_ISBN(ISBN)
 
-    return flask.jsonify(**res), 201
+    return flask.jsonify(res), 201

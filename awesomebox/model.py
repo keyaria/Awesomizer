@@ -43,7 +43,7 @@ def close_db(error):
 def insert_books(title, author_name, ISBN, thumbnail, times_scanned):
     con = get_db()
     cur = con.cursor()
-    cur.execute("INSERT OR IGNORE INTO books VALUES (title, author_name, ISBN, thumbnail, times_scanned) VALUES (?,?,?,?,?)", (title, author_name, ISBN, thumbnail, times_scanned))
+    cur.execute("INSERT OR IGNORE INTO books (title, author_name, ISBN, thumbnail, times_scanned) VALUES (?,?,?,?,?)", (title, author_name, ISBN, thumbnail, times_scanned))
     con.commit()
 
 #Returns all entries in database
@@ -68,7 +68,8 @@ def search_ISBN_get_times_scanned(ISBN):
     if len(res) == 0:
         return None
     else:
-        return int(res[0][4]) #returns times_scanned
+        print(res)
+        return int(res[0]["times_scanned"]) #returns times_scanned
 
 #Returns all the info for one specific book
 def get_info_from_ISBN(ISBN):
