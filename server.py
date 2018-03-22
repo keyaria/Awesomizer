@@ -1,4 +1,4 @@
-import time, threading, models, json, csv, isbnlib, requests
+import time, threading, models, json, csv, isbnlib, requests, re
 from threading import Thread
 from flask import Flask, render_template, session, request
 from flask_socketio import SocketIO, emit, join_room, leave_room, close_room, rooms, disconnect
@@ -16,7 +16,7 @@ def get_ISBN_from_barcode_csv(barcode):
 
 def get_ISBN_from_barcode(barcode):
     info = requests.get("https://mirlyn.lib.umich.edu/api/simple/v1/barcode/{}".format(barcode))
-    print(info.text)
+    # print(info.text)
 
     return json.loads(info.text)['docs'][0]['isbn'][0]
 
@@ -24,12 +24,18 @@ def get_ISBN_from_barcode(barcode):
 #Sends all the information from database so the website can be populated
 @app.route('/')
 def index():
-    res = models.get_all_books()
+    res = []
+    for r in models.get_all_books():
+        r[1] = ", ".join(re.findall('[A-Z]{1}\w+ (?:[A-Z]{1}[a-z]+|TH=\w+-\w+)', r[1]))
+        res.append(r)
     return render_template('index.html', data = (res))
 
 @app.route('/most-awesomized')
 def most_awesome():
-    res = models.get_all_books()
+    res = []
+    for r in models.get_all_books():
+        r[1] = ", ".join(re.findall('[A-Z]{1}\w+ (?:[A-Z]{1}[a-z]+|TH=\w+-\w+)', r[1]))
+        res.append(r)
     return render_template('most-awesomized.html', data = (res))
 
 @app.route('/about')
@@ -42,9 +48,9 @@ def about():
 @app.route('/send_barcode/<barcode>', methods=['POST'])
 def get_barcode_from_scanner(barcode):
     ISBN = get_ISBN_from_barcode(barcode)
-    print(ISBN, "ISBN")
+    # print(ISBN, "ISBN")
     book_info = isbnlib.meta(ISBN)
-    print(book_info)
+    # print(book_info)
     book_cover = isbnlib.cover(ISBN)
 
     times_scanned = models.search_ISBN_get_times_scanned(ISBN)
@@ -60,10 +66,10 @@ def get_barcode_from_scanner(barcode):
 
     return render_template('index.html', data = [])
 
-#Gets called whenever someone connects to web site, probably don't need
-@socketio.on('connect', namespace='/awesome')
-def local_client_connect():
-    print("connected")
+# #Gets called whenever someone connects to web site, probably don't need
+# @socketio.on('connect', namespace='/awesome')
+# def local_client_connect():
+#     print("connected")
 
 
 if __name__ == '__main__':
