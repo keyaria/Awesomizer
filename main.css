@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Serif');
+
+* {
+  color:red;
+}
+
+#book {
+  margin:5%;
+  border: rgba(0,0,0, 0.5) 10px solid;
+}
+
+.container-fluid{
+  margin: 20%;
+}
+
+img {
+  margin-right:2%;
+}

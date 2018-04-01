@@ -4,10 +4,8 @@
     <title>Recently Awesomized | The Awesomizer</title>
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/custom.css">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <link rel="shortcut icon" href="/static/favicon.png">
-    <link rel="apple-touch-icon" href="/static/favicon.png">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -15,9 +13,7 @@
 </head>
 
 <body>
-  <h1>RECENTLY AWESOMIZED</h1>
-
-  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color:#60748F">
+  <nav class="navbar navbar-expand-lg navbar-light">
     <a class="navbar-brand" href="/">The Awesomizer | Shapiro Design Lab</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -32,15 +28,21 @@
   </nav>
 
 	 <br>
-   <div class="container-fluid" id="content">
+   <div class="container-fluid" >
 	    <h3> Recently Awesomized </h3>
-      {% for d in data %}
-        <h5 id="book title"> {{ d[0] }} </h5>
-          {{ d[1] }} <br />
-        <img alt="Book cover: {{d[0]}}" src="{{ d[3] }}" /> <br /> <br />
-      {% endfor %}
+      <br />
+
+      <div class="row">
+        {% for d in data %}
+        <div id="book" class="col-sm-12 col-md-6 col-lg-4">
+           <h5>{{ d[0] }}</h5>
+           by: {{ d[1] }} <br>
+           Times Scanned: {{ d[4]}} <br>
+           <img alt="Book cover: {{d[0]}}" src="{{ d[3] }}" /> <br> <br>
+         </div>
+        {% endfor %}
+      </div>
     </div>
-    <br>
 
 </body>
 </html>
