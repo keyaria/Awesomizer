@@ -36,6 +36,7 @@ def most_awesome():
     for r in models.get_all_books():
         r[1] = ", ".join(re.findall('[A-Z]{1}\w+ (?:[A-Z]{1}[a-z]+|TH=\w+-\w+)', r[1]))
         res.append(r)
+    res.sort(key=lambda x: x[4], reverse=True)
     return render_template('most-awesomized.html', data = (res))
 
 @app.route('/about')

@@ -2,66 +2,42 @@
 <html lang="en">
 <head>
     <title>Most Awesomized | The Awesomizer</title>
-
-		<link rel= "stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:400,400italic,300,100">
-	  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
-    <script type="text/javascript" charset="utf-8">
-          var data = '{{ data|tojson|safe }}'
-          var data_converted = JSON.parse("[" + data + "]")[0]
-          var re = /[A-Z]{1}\w+ ([A-Z]{1}[a-z]+|TH=\w+-\w+)/g;
-          data_converted.sort(function(a, b){
-            return (a[4] >= b[4])
-          });
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Serif');
 
-          console.log(data_converted)
-          $(document).ready(function()
-          {
-              if (data_converted.length != 0) {
-                  console.log("Database")
-                  for (var i = 0; i < data_converted.length; i++) {
-                    var d = String(data_converted[i][1])
-                    var authors = d.match(re)
+      *{
+        font-style: "IBM Plex Serif", serif;
+      }
 
-                    $( "#Content" ).prepend("<div style='display:inline-flex; height:200px; width: 48%; margin: 1% 1% 1% 1%; border: 1px solid #aabbcc;'> <img style='margin-right:2%;'src=\"" + data_converted[i][3] + " \"><div id=\"" + data_converted[i][2] +
-                    "-scanned\" style ='display:inline-block;'><i>"
-                                + data_converted[i][0] + "</i><br> by: "
-                                +  authors +
-                                  "<br> Times Scanned: " + data_converted[i][4] + "</div> <br /><br /> ");
-                          }
-              }
-              namespace = '/awesome'; // change to an empty string to use the global namespace
+      body{
+        margin: 5%;
+      }
 
-              // the socket.io documentation recommends sending an explicit package upon connection
-              // this is specially important when using the global namespace
-              var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
+      #book{
+        border: #222 1px solid;
+        border-radius: 5px;
+      }
 
-              // event handler for server sent data
-              // the data is displayed in the "Received" section of the page
-              socket.on('barcode', function(msg)
-              {
-                  console.log("First time scanned")
-                  $( "#Content" ).prepend("<div style='float: left'> <img src=\"" + msg.data[3] + " \" style='height:160px; width:120px; display:block; margin-left:20px; margin-top: auto'><div id=\"" + msg.data[2] +
-                      "-scanned\" style ='width: 150px; text-align: center; font-size: 15px;'>Times Scanned: " + msg.data[4] + "</div></div>");
-              });
-              //Recieves updated information
-              socket.on('update_data', function(msg)
-              {
-                  console.log(msg.data[0])
-                  var update= document.getElementById(msg.data[0][2].toString() + "-scanned")
-                  update.innerHTML = "Times Scanned: " + msg.data[0][4].toString()
-              });
-          });
-      </script>
+      nav {
+        background-color: #60748F;
+      }
+
+      img {
+        padding-bottom: 1%;
+      }
+    </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color:#60748F">
+  <h3 style="text-transform: uppercase;text-align:center;"> Most Awesomized </h3>
+
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#60748F">
     <a class="navbar-brand" href="/">The Awesomizer | Shapiro Design Lab</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -75,13 +51,19 @@
   </div>
   </nav>
 
-	 <br>
-   <div class="container-fluid">
-	    <h3> Most Awesomized </h3>
-   </div>
-   <br>
+  <br />
 
-	 <div class="container-fluid" style="padding-left: 30px" id="Content">
-	 </div>
+  <div class="container-fluid box">
+     <div class="row">
+       {% for d in data %}
+       <div id="book" class="col-sm-12">
+          <h5>{{ d[0] }}</h5>
+          by: {{ d[1] }} <br>
+          Times Scanned: {{ d[4]}} <br>
+          <img alt="Book cover: {{d[0]}}" src="{{ d[3] }}" /> <br>
+        </div>
+       {% endfor %}
+     </div>
+   </div>
 </body>
 </html>
