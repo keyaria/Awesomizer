@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css?family=Tajawal');
+
+  #book{
+    border: #222 1px solid;
+    border-radius: 5px;
+  }
+
+  nav, .btn {
+    background-color: #60748F;
+    border: #60748F;
+  }
+
+  .btn-info:hover, .btn-info:active{
+    background-color: #8694A8;
+    border: #8694A8;
+  }
+
+  .navbar-brand{
+    font-size: 3vh;
+  }
+
+
+body{
+  font-family: "Tajawal", "Open Sans", sans-serif;
+}

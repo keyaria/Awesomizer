@@ -3,22 +3,21 @@
 <head>
     <title>Most Awesomized | The Awesomizer</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-
+    <link rel="stylesheet" type="text/css" href="static/styles/main.css" />
+    
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
     <style>
-      @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+      @import url('https://fonts.googleapis.com/css?family=Tajawal');
 
       body{
-        margin: 5%;
-        font-family: "Open Sans", sans-serif;
+        font-family: "Tajawal", "Open Sans", sans-serif;
       }
 
       #book{
-        border: #222 1px solid;
-        border-radius: 5px;
+        border: rgba(0,0,0, 0.2) 10px solid;
       }
 
       nav {
@@ -28,12 +27,14 @@
       img {
         padding-bottom: 1%;
       }
+
+      .navbar-brand{
+        font-size: 3vh;
+      }
     </style>
 </head>
 
 <body>
-  <h3 style="text-transform: uppercase;text-align:center;"> Most Awesomized </h3>
-
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#60748F">
     <a class="navbar-brand" href="/">The Awesomizer | Shapiro Design Lab</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-label="Toggle navigation">
@@ -51,13 +52,15 @@
   <br />
 
   <div class="container-fluid box">
+    <h1> Most Awesomized </h1>
      <div class="row">
        {% for d in data %}
-       <div id="book" class="col-sm-12">
+       <div id="book" class="col-sm-12 col-lg-6" style="height:300px;">
           <h5>{{ d[0] }}</h5>
           by: {{ d[1] }} <br>
           Times Scanned: {{ d[4]}} <br>
           <img alt="Book cover: {{d[0]}}" src="{{ d[3] }}" /> <br>
+          <hr>
         </div>
        {% endfor %}
      </div>
